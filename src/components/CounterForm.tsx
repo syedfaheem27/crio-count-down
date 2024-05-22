@@ -1,25 +1,67 @@
-import { FC, ReactElement, useState } from "react";
+import { FC, ReactElement, useEffect, useState } from "react";
 
 interface myProps {
   addDate: (date: Date) => void;
+  startTimer: () => void;
+  pauseTimer: () => void;
+  cancelTimer: () => void;
+  hasStarted: boolean;
 }
 
-const CounterForm: FC<myProps> = ({ addDate }): ReactElement => {
-  const [currDate, setCurrDate] = useState<Date>(new Date());
+const CounterForm: FC<myProps> = ({
+  addDate,
+  startTimer,
+  pauseTimer,
+  hasStarted,
+  cancelTimer,
+}): ReactElement => {
+  const [isPaused, setIsPaused] = useState<boolean | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setCurrDate(new Date(e.target.value));
-  };
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
+    handleCancelTimer();
+    addDate(new Date(e.target.value));
+  }
 
-  const handleSubmit = (e: React.FormEvent): void => {
-    e.preventDefault();
-    addDate(currDate);
-  };
+  function toggleIsPaused() {
+    setIsPaused((is) => (isPaused === null ? true : !is));
+  }
+
+  function handleCancelTimer() {
+    setIsPaused(null);
+    cancelTimer();
+  }
+
+  useEffect(() => {
+    if (!hasStarted || isPaused === null) return;
+
+    if (isPaused) pauseTimer();
+    else startTimer();
+  }, [hasStarted, isPaused]);
+
   return (
     <section className="form-container">
-      <form className="form" onSubmit={handleSubmit}>
-        <input type="date" name="date" id="date" onChange={handleChange} />
-        <button>Start Timer</button>
+      <form className="form">
+        <input
+          type="datetime-local"
+          name="date"
+          id="date"
+          onChange={handleChange}
+        />
+        {!hasStarted && (
+          <button type="button" onClick={startTimer}>
+            Start Timer
+          </button>
+        )}
+        {hasStarted && (
+          <div>
+            <button type="button" onClick={toggleIsPaused}>
+              {isPaused ? "Restart timer" : "Pause timer"}
+            </button>
+            <button type="button" onClick={handleCancelTimer}>
+              Cancel Timer
+            </button>
+          </div>
+        )}
       </form>
     </section>
   );
