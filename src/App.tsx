@@ -1,19 +1,28 @@
-function App() {
+import { FC, ReactElement, useState } from "react";
+
+import CounterForm from "./components/CounterForm";
+import Header from "./components/Header";
+import DateCard from "./components/DateCard";
+import CardsContainer from "./components/CardsContainer";
+
+const App: FC = (): ReactElement => {
+  const [startDate, setStartDate] = useState<Date | null>(null);
+
+  const addDate = (date: Date) => {
+    setStartDate(date);
+  };
   return (
     <>
-      <header className="header">
-        <h1>
-          Count Down <span>Timer</span>
-        </h1>
-      </header>
-      <section className="form-container">
-        <form className="form">
-          <input type="date" name="date" id="date" />
-          <button>Start Timer</button>
-        </form>
-      </section>
+      <Header />
+      <CounterForm addDate={addDate} />
+      <CardsContainer>
+        <DateCard value={0} label="Days" />
+        <DateCard value={0} label="Hours" />
+        <DateCard value={0} label="Minutes" />
+        <DateCard value={0} label="Seconds" />
+      </CardsContainer>
     </>
   );
-}
+};
 
 export default App;

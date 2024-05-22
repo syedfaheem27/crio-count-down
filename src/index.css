@@ -17,14 +17,17 @@ img {
   object-fit: cover;
   object-position: center;
 }
+ul {
+  list-style: none;
+}
 
 body {
   background-image: linear-gradient(
-    0.25turn,
-    var(--color-purple-500),
-    50%,
-    var(--color-blue)
+    45deg,
+    var(--color-purple-500) 20%,
+    var(--color-blue) 100%
   );
+  min-height: 100vh;
 }
 
 .header {
@@ -64,4 +67,40 @@ body {
 
 .form button {
   cursor: pointer;
+}
+
+.date-cards {
+  /* border: 1px solid red; */
+  margin-top: 1.5em;
+  padding: 1em;
+}
+
+.cards-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5em 0.75em;
+}
+
+.date-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 4px;
+  align-items: center;
+  padding: 0.6em 0.5em;
+  width: 20%;
+  max-width: 130px;
+  gap: 0.4rem;
+  background-image: linear-gradient(
+    45deg,
+    var(--color-purple-500) 20%,
+    var(--color-blue) 100%
+  );
+  font-weight: bold;
+  box-shadow: 0px 1px 4px var(--color-white);
+}
+
+.date-card h3 {
+  color: var(--color-white);
 }
