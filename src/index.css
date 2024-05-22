@@ -1,0 +1,67 @@
+:root {
+  --color-blue: #2563eb;
+  --color-purple-500: #c084fc;
+  --color-purple-800: #6b21a8;
+  --color-white: #ffff;
+}
+
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+}
+
+img {
+  max-width: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+body {
+  background-image: linear-gradient(
+    0.25turn,
+    var(--color-purple-500),
+    50%,
+    var(--color-blue)
+  );
+}
+
+.header {
+  margin-top: 3em;
+  color: var(--color-white);
+  padding: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header span {
+  color: var(--color-purple-800);
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1em;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form input[type="date"],
+.form button {
+  border: 1px solid var(--color-white);
+  background-color: inherit;
+  padding: 0.5em 0.75em;
+  border-radius: 4px;
+  color: var(--color-white);
+  font-weight: bold;
+}
+
+.form button {
+  cursor: pointer;
+}
