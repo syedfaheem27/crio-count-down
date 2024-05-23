@@ -1,14 +1,10 @@
-const secsInMin = 60;
-const secsInHour = 60 * secsInMin;
-const secsInDay = 24 * secsInHour;
-
 export const getDaysDiff = (date1: Date, date2: Date): number => {
   const ts1 = date1.getTime();
   const ts2 = date2.getTime();
 
   const diff = Math.abs(ts1 - ts2);
 
-  return Math.floor(diff / secsInDay);
+  return Math.floor(diff / (24 * 60 * 60 * 1000));
 };
 
 export const getHoursDiff = (date1: Date, date2: Date): number => {
@@ -17,9 +13,9 @@ export const getHoursDiff = (date1: Date, date2: Date): number => {
 
   const diff = Math.abs(ts1 - ts2);
 
-  const remainingTime = diff % secsInDay;
+  const remainingTime = diff % (24 * 60 * 60 * 1000);
 
-  return Math.floor(remainingTime / (secsInHour * 1000));
+  return Math.floor(remainingTime / (60 * 60 * 1000));
 };
 
 export const getMinutesDiff = (date1: Date, date2: Date): number => {
@@ -28,9 +24,9 @@ export const getMinutesDiff = (date1: Date, date2: Date): number => {
 
   const diff = Math.abs(ts1 - ts2);
 
-  const remainingTime = diff % secsInHour;
+  const remainingTime = diff % (60 * 60 * 1000);
 
-  return Math.floor(remainingTime / (secsInMin * 1000));
+  return Math.floor(remainingTime / (60 * 1000));
 };
 
 export const getSecondsDiff = (date1: Date, date2: Date): number => {
@@ -39,7 +35,7 @@ export const getSecondsDiff = (date1: Date, date2: Date): number => {
 
   const diff = Math.abs(ts1 - ts2);
 
-  const remainingTime = diff % secsInMin;
+  const remainingTime = diff % (60 * 1000);
 
-  return remainingTime;
+  return Math.floor(remainingTime / 1000);
 };

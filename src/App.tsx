@@ -4,7 +4,6 @@ import CounterForm from "./components/CounterForm";
 import Header from "./components/Header";
 import DateCard from "./components/DateCard";
 import CardsContainer from "./components/CardsContainer";
-
 import {
   getDaysDiff,
   getHoursDiff,
@@ -12,41 +11,37 @@ import {
   getSecondsDiff,
 } from "./utils/dateUtils";
 
-const getHours = (timer: number) => {
-  const remainingTime = timer % (24 * 60 * 60);
-
-  return Math.floor(remainingTime / (60 * 60));
-};
-
-const getMins = (timer: number) => {
-  const remainingTime = timer % (60 * 60);
-
-  return Math.floor(remainingTime / 60);
-};
-
-const getSecs = (timer: number) => {
-  const remainingTime = timer % 60;
-
-  return remainingTime;
-};
-
 const App: FC = (): ReactElement => {
-  const startDate = useState<Date>(new Date())[0];
+  const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(null);
+
   const [timer, setTimer] = useState<number>(0);
+
   const [hasStarted, setHasStarted] = useState<boolean>(false);
   const [hasFinished, setHasFinished] = useState<boolean>(false);
+  const [hasExceeded, setHasExceeded] = useState<boolean>(false);
 
   const intervalRef = useRef<number | null>(null);
 
+  //Add start and finish dates
   const addDate = (date: Date) => {
+    const newDate = new Date(date.getTime() - 8639880000);
+
+    setStartDate(newDate);
     setEndDate(date);
   };
 
+  //Start the timer
   const startTimer = () => {
     if (!endDate) return alert("End Date not yet set!");
     if (endDate < startDate)
       return alert("Can't have a date lesser than the current date!s");
+
+    // When we start a new timer
+    if (hasFinished) {
+      setHasExceeded(false);
+      setHasFinished(false);
+    }
 
     setHasStarted(true);
     intervalRef.current = setInterval(() => {
@@ -67,31 +62,45 @@ const App: FC = (): ReactElement => {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
+    setEndDate(null);
     setTimer(0);
   };
 
   const daysElapsed =
-    startDate === null ? 0 : Math.floor(timer / (24 * 60 * 60));
+    endDate === null
+      ? 0
+      : getDaysDiff(startDate, new Date(endDate.getTime() + timer * 1000));
 
-  const hoursElapsed = startDate === null ? 0 : getHours(timer);
+  const hoursElapsed =
+    endDate === null
+      ? 0
+      : getHoursDiff(startDate, new Date(endDate.getTime() + timer * 1000));
 
-  const minutesElapsed = startDate === null ? 0 : getMins(timer);
+  const minutesElapsed =
+    endDate === null
+      ? 0
+      : getMinutesDiff(startDate, new Date(endDate.getTime() + timer * 1000));
 
-  const secsElapsed = startDate === null ? 0 : getSecs(timer);
+  const secsElapsed =
+    endDate === null
+      ? 0
+      : getSecondsDiff(startDate, new Date(endDate.getTime() + timer * 1000));
 
   useEffect(() => {
-    if (endDate && timer * 1000 + startDate.getTime() === endDate.getTime()) {
+    if (endDate && timer * 1000 + startDate.getTime() >= endDate.getTime()) {
       setHasFinished(true);
       return cancelTimer();
     }
 
-    const timeElapsedMS = timer * 1000 + startDate.getTime();
-
-    if (Math.floor(timeElapsedMS / (24 * 60 * 60 * 1000)) >= 100) {
+    if (
+      endDate &&
+      getDaysDiff(startDate, new Date(endDate.getTime() + timer * 1000)) >= 100
+    ) {
+      setHasExceeded(true);
       setHasFinished(true);
       return cancelTimer();
     }
-  }, [timer, startDate, endDate]);
+  }, [timer, startDate, endDate, hasStarted]);
 
   return (
     <div className="container">
@@ -103,12 +112,22 @@ const App: FC = (): ReactElement => {
         hasStarted={hasStarted}
         cancelTimer={cancelTimer}
       />
-      <CardsContainer>
-        <DateCard value={daysElapsed} label="Days" />
-        <DateCard value={hoursElapsed} label="Hours" />
-        <DateCard value={minutesElapsed} label="Minutes" />
-        <DateCard value={secsElapsed} label="Seconds" />
-      </CardsContainer>
+      {!hasFinished && (
+        <CardsContainer>
+          <DateCard value={daysElapsed} label="Days" />
+          <DateCard value={hoursElapsed} label="Hours" />
+          <DateCard value={minutesElapsed} label="Minutes" />
+          <DateCard value={secsElapsed} label="Seconds" />
+        </CardsContainer>
+      )}
+      {hasFinished && !hasExceeded && (
+        <p className="end-text">
+          💐 The Count down is over! What's next on your adventure? 💐
+        </p>
+      )}
+      {hasExceeded && (
+        <p className="end-text">Selected time is more than 100 days😥</p>
+      )}
     </div>
   );
 };

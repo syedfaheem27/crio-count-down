@@ -2,6 +2,7 @@
   --color-blue: #2563eb;
   --color-purple-500: #c084fc;
   --color-purple-800: #6b21a8;
+  --color-purple-900: #33015d;
   --color-white: #ffff;
 }
 
@@ -34,6 +35,12 @@ body {
   width: 100%;
   min-height: 100vh;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+}
+.container p {
+  align-self: center;
 }
 .header {
   margin-top: 3em;
@@ -45,7 +52,7 @@ body {
 }
 
 .header span {
-  color: var(--color-purple-800);
+  color: var(--color-purple-900);
 }
 
 .form-container {
@@ -77,6 +84,7 @@ body {
 .date-cards {
   margin-top: 1.5em;
   padding: 1em;
+  display: flex;
 }
 
 .cards-container {
@@ -110,4 +118,18 @@ body {
 
 .date-card h3 {
   color: var(--color-white);
+}
+
+.end-text {
+  color: var(--color-purple-900);
+  font-weight: bold;
+}
+
+@media (max-width: 400px) {
+  .cards-container {
+    flex-direction: column;
+  }
+  .date-card {
+    width: 80%;
+  }
 }

@@ -18,6 +18,7 @@ const CounterForm: FC<myProps> = ({
   const [isPaused, setIsPaused] = useState<boolean | null>(null);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
+    //while adding a new date, we need to cancel any precious timers
     handleCancelTimer();
     addDate(new Date(e.target.value));
   }
