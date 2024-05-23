@@ -4,12 +4,7 @@ import CounterForm from "./components/CounterForm";
 import Header from "./components/Header";
 import DateCard from "./components/DateCard";
 import CardsContainer from "./components/CardsContainer";
-import {
-  getDaysDiff,
-  getHoursDiff,
-  getMinutesDiff,
-  getSecondsDiff,
-} from "./utils/dateUtils";
+import { getDaysDiff, getHoursDiff, getMinutesDiff } from "./utils/dateUtils";
 
 const App: FC = (): ReactElement => {
   const [startDate, setStartDate] = useState<Date>(new Date());
@@ -79,12 +74,11 @@ const App: FC = (): ReactElement => {
       ? 0
       : getMinutesDiff(startDate, new Date(endDate.getTime() + timer * 1000));
 
-  const secsElapsed =
-    endDate === null
-      ? 0
-      : getSecondsDiff(startDate, new Date(endDate.getTime() + timer * 1000));
+  const secsElapsed = endDate === null ? 0 : Math.floor(timer % 60);
 
   useEffect(() => {
+    if (!hasStarted) return;
+
     if (endDate && timer * 1000 + startDate.getTime() >= endDate.getTime()) {
       setHasFinished(true);
       return cancelTimer();

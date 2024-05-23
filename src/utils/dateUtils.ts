@@ -28,14 +28,3 @@ export const getMinutesDiff = (date1: Date, date2: Date): number => {
 
   return Math.floor(remainingTime / (60 * 1000));
 };
-
-export const getSecondsDiff = (date1: Date, date2: Date): number => {
-  const ts1 = date1.getTime();
-  const ts2 = date2.getTime();
-
-  const diff = Math.abs(ts1 - ts2);
-
-  const remainingTime = diff % (60 * 1000);
-
-  return Math.floor(remainingTime / 1000);
-};
