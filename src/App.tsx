@@ -25,9 +25,7 @@ const App: FC = (): ReactElement => {
 
   //Add start and finish dates
   const addDate = (date: Date) => {
-    const newDate = new Date(date.getTime() - 8639880000);
-
-    setStartDate(newDate);
+    setStartDate(new Date());
     setEndDate(date);
   };
 
